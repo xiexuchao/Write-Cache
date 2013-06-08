@@ -1,0 +1,115 @@
+; OsnPA.inf
+;
+; Installation file (.inf) for EIM Incorporation OsnPA driver.
+;
+; (c) Copyright 2006-2007 EIM Incorporation 
+;
+
+[Version]
+Signature="$Windows NT$"
+Provider=%StorTrust%
+ClassGUID={71A27CDD-812A-11D0-BEC7-08002BE2092F}
+Class=Volume
+DriverVer=01/16/2001, 4.0.0
+
+[DestinationDirs]
+DefaultDestDir   = 12
+
+;
+; Class installation section
+;
+
+[ClassInstall32]
+Addreg=DiskClassReg     
+
+[DiskClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-53
+
+;
+; Driver information
+;
+
+[Manufacturer]
+%StorTrust%   = StorTrust.Mfg
+
+[StorTrust.Mfg]	
+%StorTrust.DeviceDesc% = OsnPA, *OsnPA
+
+
+;
+; General installation section
+;
+
+[OsnPA]
+AddReg=OsnPA.AddReg
+CopyFiles=OsnPA.Files
+
+[OsnPA.AddReg]
+; append this service to existing REG_MULTI_SZ list, if any
+HKR,,"UpperFilters",0x00010008,"OsnPA"
+
+;
+; File sections
+;
+
+[OsnPA.Files]
+OsnPA.sys
+
+
+;
+; Service Installation
+;
+
+[OsnTPA.Services]
+AddService = OsnPA,, OsnPA_Service_Inst,OsnPA_Eventlog_Inst
+
+[OsnPA_Service_Inst]
+DisplayName    = %OsnPA.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 0                  ; SERVICE_BOOT_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\OsnPA.sys
+
+[OsnPA_Eventlog_Inst]
+AddReg = OsnPA_Eventlog_AddReg
+
+[OsnPA_Eventlog_AddReg]
+HKR,,EventMessageFile,0x00020000,"%SystemRoot%\System32\IoLogMsg.dll;%SystemRoot%\System32\drivers\OsnPA.sys"
+HKR,,TypesSupported,0x00010001,7
+
+
+;
+; Source file information
+;
+
+[SourceDisksNames]
+1 = %DiskId1%,,,""
+
+[SourceDisksFiles]
+OsnPA.sys = 1,,
+
+
+[Strings]
+
+;
+; Non-Localizable Strings
+;
+
+REG_SZ         = 0x00000000
+REG_MULTI_SZ   = 0x00010000
+REG_EXPAND_SZ  = 0x00020000
+REG_BINARY     = 0x00000001
+REG_DWORD      = 0x00010001
+SERVICEROOT    = "System\CurrentControlSet\Services"
+
+;
+; Localizable Strings
+;
+
+ClassName = "Volume"
+StorTrust			= "Enterprise Information Management Inc."
+DiskId1				= "EIM Installation Disk #1"
+OsnPA.SvcDesc		= "EIM Osn Performance Accelerator Driver"
+StorTrust.DeviceDesc= "EIM Osn Performance Accelerator Driver"
+

@@ -1,0 +1,41 @@
+#
+# This file defines how the build should be performed. It is
+# intended for use with mkddk.sh but should also work from a
+# standalone DDK build environment.
+#
+
+TARGETNAME = OsnPA
+TARGETTYPE = DRIVER
+TARGETPATH = ..\..\Target\$(DDK_TARGET_OS)\$(DDKBUILDENV)\StorageTrust
+
+# Additional include directories specific to this driver.
+# The 'standard' set of directories will usually be sufficient,
+# so this is typically empty. Directories in the Tools area
+# can be accessed using $(TOOLSDIR)\<...>\inc.
+
+INCLUDES =..\common;..\..\Applications\common
+
+# Preprocessor definitions specific to this driver. NDEBUG will
+# be set automatically, as will platform identifiers such as W2K,
+# WXP and WNET.
+
+C_DEFINES = -D_KERNEL_ 
+
+TARGETLIBS=  $(DDK_LIB_PATH)\wdmsec.lib \
+	     $(DDK_LIB_PATH)\ntstrsafe.lib 
+
+# Sources comprising the driver.
+
+SOURCES = \
+	Osnpamsg.mc \
+	Osnpa.rc \
+	diskdevice.cpp \
+	ActiveIrp.cpp \
+	DiskCacheVolume.cpp \
+	OsnPADevice.cpp \
+	drventry.cpp \
+	global.cpp \
+	common.cpp 
+ 
+	
+
